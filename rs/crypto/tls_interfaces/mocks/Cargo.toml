@@ -1,0 +1,13 @@
+[package]
+name = "ic-crypto-tls-interfaces-mocks"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+documentation.workspace = true
+
+[dependencies]
+ic-base-types = { path = "../../../types/base_types" }
+ic-crypto-tls-interfaces = { path = "../" }
+mockall = { workspace = true }
+rustls = { workspace = true }

@@ -1,0 +1,39 @@
+load("@rules_rust//rust:defs.bzl", "rust_doc_test", "rust_library", "rust_test")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_library(
+    name = "config",
+    srcs = glob(["src/**"]),
+    crate_name = "ic_config",
+    version = "0.9.0",
+    deps = [
+        # Keep sorted.
+        "//rs/protobuf",
+        "//rs/registry/subnet_type",
+        "//rs/sys",
+        "//rs/types/base_types",
+        "//rs/types/types",
+        "@crate_index//:json5",
+        "@crate_index//:serde",
+        "@crate_index//:tempfile",
+    ],
+)
+
+rust_test(
+    name = "ic_config_test",
+    crate = ":config",
+    proc_macro_deps = [
+        # Keep sorted.
+        "@crate_index//:proptest-derive",
+    ],
+    deps = [
+        # Keep sorted.
+        "@crate_index//:proptest",
+    ],
+)
+
+rust_doc_test(
+    name = "ic_config_doc_test",
+    crate = ":config",
+)

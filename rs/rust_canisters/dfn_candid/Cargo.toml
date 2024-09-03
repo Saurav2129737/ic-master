@@ -1,0 +1,27 @@
+[package]
+name = "dfn_candid"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+documentation.workspace = true
+
+[dependencies]
+candid = { workspace = true }
+dfn_core = { path = "../dfn_core" }
+ic-base-types = {path="../../types/base_types"}
+on_wire = { path = "../on_wire" }
+serde = { workspace = true }
+
+[[bin]]
+name = "candid-test-canister"
+path = "test/wasm.rs"
+test = false
+doc = false
+
+[dev-dependencies]
+canister-test = { path = "../../rust_canisters/canister_test" }
+
+[[test]]
+name = "test"
+path = "test/test.rs"

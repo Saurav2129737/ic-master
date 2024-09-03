@@ -1,0 +1,19 @@
+[package]
+name = "ic-logger"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+documentation.workspace = true
+
+[dependencies]
+chrono = { workspace = true }
+ic-config = { path = "../../config" }
+ic-protobuf = { path = "../../protobuf" }
+ic-utils = { path = "../../utils" }
+serde = { workspace = true }
+slog = { workspace = true }
+slog-async = { workspace = true }
+slog-json = { version = "2.6.1", features = ["nested-values"] }
+slog-scope = { workspace = true }
+slog-term = { workspace = true }

@@ -1,0 +1,69 @@
+load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_library", "rust_test")
+
+DEPENDENCIES = [
+    # Keep sorted.
+    "//rs/crypto/sha2",
+    "//rs/crypto/utils/threshold_sig_der",
+    "//rs/protobuf",
+    "//rs/registry/client",
+    "//rs/registry/helpers",
+    "//rs/registry/keys",
+    "//rs/registry/local_store",
+    "//rs/registry/nns_data_provider_wrappers",
+    "//rs/registry/subnet_type",
+    "//rs/types/base_types",
+    "//rs/types/types",
+    "@crate_index//:anyhow",
+    "@crate_index//:base64",
+    "@crate_index//:clap_3_2_25",
+    "@crate_index//:prost",
+    "@crate_index//:serde",
+    "@crate_index//:serde_json",
+    "@crate_index//:thiserror",
+    "@crate_index//:tokio",
+    "@crate_index//:url",
+]
+
+MACRO_DEPENDENCIES = []
+
+DEV_DEPENDENCIES = [
+    # Keep sorted.
+    "//rs/prep",
+    "//rs/registry/provisional_whitelist",
+    "@crate_index//:tempfile",
+]
+
+MACRO_DEV_DEPENDENCIES = []
+
+ALIASES = {}
+
+rust_library(
+    name = "regedit",
+    srcs = glob(["src/**"]),
+    aliases = ALIASES,
+    crate_name = "ic_regedit",
+    proc_macro_deps = MACRO_DEPENDENCIES,
+    version = "0.9.0",
+    visibility = ["//rs:system-tests-pkg"],
+    deps = DEPENDENCIES,
+)
+
+rust_binary(
+    name = "ic-regedit",
+    srcs = ["src/main.rs"],
+    aliases = ALIASES,
+    proc_macro_deps = MACRO_DEPENDENCIES,
+    visibility = [
+        "//rs:release-pkg",
+        "//rs:system-tests-pkg",
+    ],
+    deps = DEPENDENCIES + [":regedit"],
+)
+
+rust_test(
+    name = "regedit_test",
+    aliases = ALIASES,
+    crate = ":regedit",
+    proc_macro_deps = MACRO_DEPENDENCIES + MACRO_DEV_DEPENDENCIES,
+    deps = DEPENDENCIES + DEV_DEPENDENCIES,
+)

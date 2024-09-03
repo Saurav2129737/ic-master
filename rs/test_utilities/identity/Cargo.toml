@@ -1,0 +1,15 @@
+[package]
+name = "ic-test-identity"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+documentation.workspace = true
+
+[dependencies]
+ic-canister-client-sender = { path = "../../canister_client/sender" }
+ic-crypto-ed25519 = { path = "../../crypto/ed25519" }
+ic-types = { path = "../../types/types" }
+lazy_static = { workspace = true }
+rand = { workspace = true }
+rand_chacha = { workspace = true }

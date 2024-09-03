@@ -1,0 +1,90 @@
+load("@rules_rust//rust:defs.bzl", "rust_doc_test", "rust_library", "rust_test")
+load("//bazel:canisters.bzl", "rust_canister")
+load("//bazel:defs.bzl", "rust_ic_test")
+
+package(default_visibility = [
+    # Keep sorted.
+    "//publish/canisters:__pkg__",
+    "//rs/nervous_system/clients:__pkg__",
+    "//rs/nervous_system/common:__subpackages__",
+    "//rs/nervous_system/root:__pkg__",
+    "//rs/nervous_system/runtime:__pkg__",
+    "//rs/nns:__subpackages__",
+    "//rs/registry/canister:__pkg__",
+    "//rs/rosetta-api/icp_ledger:__subpackages__",
+    "//rs/rosetta-api/icrc1/benchmark/generator:__pkg__",
+    "//rs/rosetta-api/icrc1/benchmark/worker:__pkg__",
+    "//rs/rust_canisters:__subpackages__",
+    "//rs/sns:__subpackages__",
+    "//rs/tests/test_canisters/message:__pkg__",
+])
+
+DEPENDENCIES = [
+    # Keep sorted.
+    "//rs/rust_canisters/on_wire",
+    "//rs/types/base_types",
+]
+
+MACRO_DEPENDENCIES = []
+
+DEV_DEPENDENCIES = [
+    # Keep sorted.
+    "//rs/rust_canisters/canister_test",
+    "//rs/rust_canisters/dfn_json",
+]
+
+MACRO_DEV_DEPENDENCIES = []
+
+ALIASES = {}
+
+rust_library(
+    name = "dfn_core",
+    srcs = glob(["src/**"]),
+    aliases = ALIASES,
+    crate_name = "dfn_core",
+    proc_macro_deps = MACRO_DEPENDENCIES,
+    version = "0.9.0",
+    deps = DEPENDENCIES,
+)
+
+rust_canister(
+    name = "wasm",
+    srcs = ["test/wasm.rs"],
+    aliases = ALIASES,
+    proc_macro_deps = MACRO_DEPENDENCIES,
+    service_file = ":test/wasm.did",
+    deps = DEPENDENCIES + [":dfn_core"],
+)
+
+rust_test(
+    name = "dfn_core_test",
+    aliases = ALIASES,
+    crate = ":dfn_core",
+    proc_macro_deps = MACRO_DEPENDENCIES + MACRO_DEV_DEPENDENCIES,
+    deps = DEPENDENCIES + DEV_DEPENDENCIES,
+)
+
+rust_ic_test(
+    name = "dfn_core_integration_test",
+    srcs = ["test/test.rs"],
+    aliases = ALIASES,
+    crate_root = "test/test.rs",
+    data = [
+        ":wasm",
+    ],
+    env = {
+        "CARGO_MANIFEST_DIR": "rs/rust_canisters/dfn_core",
+        "WASM_WASM_PATH": "$(rootpath :wasm)",
+    },
+    proc_macro_deps = MACRO_DEPENDENCIES + MACRO_DEV_DEPENDENCIES,
+    deps = DEPENDENCIES + DEV_DEPENDENCIES + [":dfn_core"],
+)
+
+rust_doc_test(
+    name = "dfn_core_doc_test",
+    crate = ":dfn_core",
+    deps = [
+        # Keep sorted.
+        "//rs/rust_canisters/dfn_json",
+    ],
+)

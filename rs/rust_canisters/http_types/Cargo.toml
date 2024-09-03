@@ -1,0 +1,13 @@
+[package]
+name = "ic-canisters-http-types"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+documentation.workspace = true
+
+[dependencies]
+candid = { workspace = true }
+dfn_candid = { path = "../dfn_candid" }
+serde = { workspace = true }
+serde_bytes = { workspace = true }
